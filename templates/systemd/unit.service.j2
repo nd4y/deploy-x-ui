@@ -1,0 +1,18 @@
+# /etc/systemd/system/{{ systemd_service_name }}.service
+
+[Unit]
+Description={{ systemd_service_name }}
+Requires=docker.service
+After=docker.service
+StartLimitIntervalSec=60
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory={{ install_dir }}
+ExecStart=docker-compose up -d
+ExecStop=docker-compose down
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
