@@ -1,0 +1,52 @@
+---
+# tasks file for install-x-ui
+- name: Install docker.io and docker-compose
+  ansible.builtin.apt:
+    name:
+      - docker.io
+      - docker-compose
+    update_cache: false
+    state: present
+  when: install_docker
+
+- name: Cleanup {{ install_dir }}
+  ansible.builtin.file:
+    path: "{{ install_dir }}"
+    state: absent
+
+- name: Create directories
+  ansible.builtin.file:
+    group: "{{ hostvars[inventory_hostname].ansible_ssh_user }}"
+    owner: "{{ hostvars[inventory_hostname].ansible_ssh_user }}"
+    mode: "a=rX,u=rwX"
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ install_dir }}"
+    - "{{ install_dir }}/cert"
+    - "{{ install_dir }}/db"
+
+- name: Create docker-compose.yml
+  ansible.builtin.template:
+    owner: "{{ hostvars[inventory_hostname].ansible_ssh_user }}"
+    group: "{{ hostvars[inventory_hostname].ansible_ssh_user }}"
+    mode: "0644"
+    remote_src: false
+    src: "docker-compose.yml.j2"
+    dest: "{{ install_dir }}/docker-compose.yml"
+
+- name: Create systemd service
+  ansible.builtin.template:
+    owner: 'root'
+    group: 'root'
+    mode: "0644"
+    remote_src: false
+    src: "unit.service.j2"
+    dest: "/etc/systemd/system/{{ systemd_service_name }}.service"
+
+- name: Restart service
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: true
+    enabled: true
+    name: "{{ systemd_service_name }}"
