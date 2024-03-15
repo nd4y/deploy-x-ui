@@ -1,0 +1,7 @@
+- name: Deploy x-ui server
+  hosts: all
+  become: true
+  gather_facts: false
+  roles:
+    - install-x-ui
+    - configure-x-ui

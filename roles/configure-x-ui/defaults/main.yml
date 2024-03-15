@@ -1,0 +1,11 @@
+---
+# defaults file for configure-x-ui
+
+# Путь к каталогу установки на целевом сервере
+install_dir: '/opt/x-ui' 
+
+# Имя сервиса systemd, который выполняет docker-compose up/down
+systemd_service_name: x-ui 
+
+# HTTPS порт веб-интерфейса
+web_interface_port: 50443 

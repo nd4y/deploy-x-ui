@@ -1,0 +1,50 @@
+---
+# tasks file for configure-x-ui
+
+
+
+- name: Create private key
+  community.crypto.openssl_privatekey:
+    path: "{{ install_dir }}/cert/tls.key.pem"
+
+- name: Create self-signed certificate
+  community.crypto.x509_certificate:
+    path: "{{ install_dir }}/cert/tls.crt.pem"
+    privatekey_path: "{{ install_dir }}/cert/tls.key.pem"
+    provider: selfsigned
+
+- name: Configure X-UI TLS Certificate
+  ansible.builtin.shell:
+    chdir: "{{ install_dir }}/db"
+    cmd: sqlite3 x-ui.db "INSERT INTO settings (id, 'key', value) VALUES(5, 'webCertFile', '/root/cert/tls.crt.pem');"
+  changed_when: false
+
+- name: Configure X-UI TLS Key
+  ansible.builtin.shell:
+    chdir: "{{ install_dir }}/db"
+    cmd: sqlite3 x-ui.db "INSERT INTO settings (id, 'key', value) VALUES(6, 'webKeyFile', '/root/cert/tls.key.pem');"
+  changed_when: false
+
+- name: Configure X-UI Web-Interface port
+  ansible.builtin.shell:
+    chdir: "{{ install_dir }}/db"
+    cmd: sqlite3 x-ui.db "INSERT INTO settings (id, 'key', value) VALUES(4, 'webPort', '{{ web_interface_port }}');"
+  changed_when: false
+
+- name: Configure X-UI Web-Interface credentials
+  ansible.builtin.shell:
+    chdir: "{{ install_dir }}/db"
+    cmd: sqlite3 x-ui.db "UPDATE users SET username='{{ web_interface_username }}', password='{{ web_interface_password }}' WHERE id=1;"
+  changed_when: false
+
+- name: Restart service and add to autostart
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: true
+    enabled: true
+    name: "{{ systemd_service_name }}"
+
+- name: Print URL and credentials
+  ansible.builtin.debug:
+    msg: "Web-Interface: https://{{ hostvars[inventory_hostname].ansible_host }}:{{ web_interface_port }} Login: {{ web_interface_username }} Password: {{ web_interface_password }}" 
+    verbosity: 0

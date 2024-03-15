@@ -1,0 +1,14 @@
+---
+# defaults file for install-x-ui
+
+# Путь к каталогу установки на целевом сервере
+install_dir: '/opt/x-ui' 
+
+# Имя сервиса systemd, который выполняет docker-compose up/down
+systemd_service_name: x-ui 
+
+# Если не true, шаг установки docker.io и docker-compose будет пропущен. Если докер установлен "кастомным способом", установка через apt может сломать docker
+install_docker: true 
+
+# Путь к образу на Dockerhub
+image_path: 'alireza7/x-ui@sha256:2dd86f094b048b811e8ed098fa6f1b2702d8792893ec1bfd5775b86eb286a787' 
