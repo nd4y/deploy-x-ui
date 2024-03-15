@@ -3,6 +3,10 @@
 Плейбук для установки и предварительной конфигурации панели X-UI https://github.com/alireza0/x-ui
 
 
+### Требования
+Ubuntu 20.04 или Ubuntu 22.04 
+
+
 ### Запуск
 
 1. Заполните Inventory inventory/inventory.ini
@@ -26,3 +30,5 @@
 ```
 ansible-playbook main.yml 
 ```
+
+5. Адрес, логин и пароль веб интерфейса x-ui будут отображены в выводе таски Print URL and credentials
