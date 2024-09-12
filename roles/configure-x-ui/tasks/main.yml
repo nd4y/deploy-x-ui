@@ -1,7 +1,12 @@
 ---
 # tasks file for configure-x-ui
 
-
+- name: Install sqlite3
+  ansible.builtin.apt:
+    name:
+      - sqlite3
+    update_cache: false
+    state: present
 
 - name: Create private key
   community.crypto.openssl_privatekey:
