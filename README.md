@@ -4,8 +4,8 @@
 
 
 ### Требования
-Ubuntu 20.04 или Ubuntu 22.04 
-
+1. Ubuntu 20.04 или Ubuntu 22.04 
+2. Docker и docker-compose, установленные из репозиториев Ubuntu. Используется docker-compose (вместо docker compose)
 
 ### Запуск
 
