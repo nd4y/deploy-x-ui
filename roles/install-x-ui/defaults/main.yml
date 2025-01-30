@@ -11,4 +11,4 @@ systemd_service_name: x-ui
 install_docker: true 
 
 # Путь к образу на Dockerhub
-image_path: 'alireza7/x-ui@sha256:2dd86f094b048b811e8ed098fa6f1b2702d8792893ec1bfd5775b86eb286a787' 
+image_path: 'alireza7/x-ui:1.8.9' 
